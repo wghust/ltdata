@@ -1,19 +1,19 @@
 var express = require('express');
 var router = express.Router();
-var mongoose = require('mongoose');
+// var mongoose = require('mongoose');
 var moment = require('moment');
 var http = require('http');
 var fs = require('fs');
 var s = require('../settings');
 
-mongoose.connect("mongodb://" + s.host + ":" + s.port + "/" + s.db, function onMongooseError(err) {
-    if (err) {
-        throw err;
-    }
-});
+// mongoose.connect("mongodb://" + s.host + ":" + s.port + "/" + s.db, function onMongooseError(err) {
+//     if (err) {
+//         throw err;
+//     }
+// });
 
 var models = {
-    Data: require("../models/data.js")(mongoose, moment, s)
+    Data: require("../models/data.js")(moment, s, fs)
 }
 
 /* GET home page. */
@@ -23,13 +23,11 @@ router.get('/', function(req, res) {
     });
 });
 router.get('/save/alldata', function(req, res) {
-    fs.readFile('../data/basic_data.json', {
+    fs.readFile('../data/data.json', {
         'encoding': 'utf-8'
     }, function(err, data) {
-
-    });
-    res.json({
-        'ab': 123
+        var newdata = JSON.parse(data);
+        res.json(newdata);
     });
 });
 
@@ -79,7 +77,7 @@ router.get('/get/getAgencyCostPlan/:type', function(req, res) {
                 agency_name: agency_name,
                 data_show: data_show,
                 charttitle: 'Actual Cost',
-                precent: '60%'
+                precent: '52%'
                 // plan_show: plan_show
             });
         });
@@ -106,7 +104,7 @@ router.get('/get/getAgencyCostPlan/:type', function(req, res) {
                     agency_name: agency_name,
                     data_show: data_show,
                     charttitle: 'PLAN COST',
-                    precent: '60%'
+                    precent: '55%'
                 });
             });
         }
@@ -179,7 +177,7 @@ router.get('/get/oneAgency/:agencyname/investment/:investmentid/detail', functio
                 projectTimeLast += "," + a;
             }
         }
-        console.log(projectDetail);
+        // console.log(projectDetail);
         res.render('showinvest', {
             agencyName: agencyName,
             investName: investName,

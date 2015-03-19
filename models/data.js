@@ -1,94 +1,77 @@
-module.exports = function(mongoose, moment, set) {
-    var dataSchema = new mongoose.Schema({
-        Identifier: {
-            type: String
-        },
-        Business_Case_ID: {
-            type: String
-        },
-        Agency_Code: {
-            type: String
-        },
-        Agency_Name: {
-            type: String
-        },
-        Investment_Title: {
-            type: String
-        },
-        Project_ID: {
-            type: String
-        },
-        Agency_Project_ID: {
-            type: String
-        },
-        Project_Name: {
-            type: String
-        },
-        Project_Description: {
-            type: String
-        },
-        Start_Date: {
-            type: String
-        },
-        Completion_Date: {
-            type: String
-        },
-        Planned_Completion_Date: {
-            type: String
-        },
-        Projected_Actual: {
-            type: String
-        },
-        Lifecycle_Cost: {
-            type: String
-        },
-        Schedule_Variance_in_day: {
-            type: String
-        },
-        Schedule_Variance_precent: {
-            type: String
-        },
-        Cost_Variance_m: {
-            type: String
-        },
-        Cost_Variance_precent: {
-            type: String
-        },
-        Planned_Cost_m: {
-            type: String
-        },
-        Projected_Actual_Cost: {
-            type: String
-        },
-        Updated_Date: {
-            type: String
-        },
-        Updated_Time: {
-            type: String
-        },
-        Unique_Project_ID: {
-            type: String
-        }
-    });
-    var ltData = mongoose.model('data', dataSchema);
+module.exports = function(moment, set, fs) {
+    // var dataSchema = new mongoose.Schema({
+    //     Identifier: {
+    //         type: String
+    //     },
+    //     Business_Case_ID: {
+    //         type: String
+    //     },
+    //     Agency_Code: {
+    //         type: String
+    //     },
+    //     Agency_Name: {
+    //         type: String
+    //     },
+    //     Investment_Title: {
+    //         type: String
+    //     },
+    //     Project_ID: {
+    //         type: String
+    //     },
+    //     Agency_Project_ID: {
+    //         type: String
+    //     },
+    //     Project_Name: {
+    //         type: String
+    //     },
+    //     Project_Description: {
+    //         type: String
+    //     },
+    //     Start_Date: {
+    //         type: String
+    //     },
+    //     Completion_Date: {
+    //         type: String
+    //     },
+    //     Planned_Completion_Date: {
+    //         type: String
+    //     },
+    //     Projected_Actual: {
+    //         type: String
+    //     },
+    //     Lifecycle_Cost: {
+    //         type: String
+    //     },
+    //     Schedule_Variance_in_day: {
+    //         type: String
+    //     },
+    //     Schedule_Variance_precent: {
+    //         type: String
+    //     },
+    //     Cost_Variance_m: {
+    //         type: String
+    //     },
+    //     Cost_Variance_precent: {
+    //         type: String
+    //     },
+    //     Planned_Cost_m: {
+    //         type: String
+    //     },
+    //     Projected_Actual_Cost: {
+    //         type: String
+    //     },
+    //     Updated_Date: {
+    //         type: String
+    //     },
+    //     Updated_Time: {
+    //         type: String
+    //     },
+    //     Unique_Project_ID: {
+    //         type: String
+    //     }
+    // });
+    // var ltData = mongoose.model('data', dataSchema);
 
-    /**
-     * [arrangeData_remove 删除重复]
-     * @param  {[type]}   _id      [description]
-     * @param  {Function} callback [description]
-     * @return {[type]}            [description]
-     */
-    arrangeData_remove = function(_id, callback) {
-        ltData.remove({
-            '_id': _id
-        }).exec(function(err) {
-            if (err) {
-                callback(false);
-            } else {
-                callback(true);
-            }
-        });
-    },
 
     /**
      * [arrangeData 整理所有的数据，去掉重复的]
@@ -117,7 +100,10 @@ module.exports = function(mongoose, moment, set) {
      * @return {[type]}            [description]
      */
     getAgency_list = function(callback) {
-        ltData.find(function(err, agencys) {
+        fs.readFile('../data/data.json', {
+            'encoding': 'utf-8'
+        }, function(err, data) {
+            var agencys = JSON.parse(data);
             var Agency = [];
             for (var i = 0; i < agencys.length; i++) {
                 var isHere = false;
@@ -137,6 +123,27 @@ module.exports = function(mongoose, moment, set) {
             // console.log(Agency.length);
             callback(Agency);
         });
+
+        // ltData.find(function(err, agencys) {
+        //     var Agency = [];
+        //     for (var i = 0; i < agencys.length; i++) {
+        //         var isHere = false;
+        //         for (var j = 0; j < Agency.length; j++) {
+        //             if (agencys[i].Agency_Name === Agency[j].Agency_Name && parseInt(agencys[i].Agency_Code) === parseInt(Agency[j].Agency_Code)) {
+        //                 isHere = true;
+        //             }
+        //         }
+        //         if (!isHere) {
+        //             var newAgency = {
+        //                 Agency_Name: agencys[i].Agency_Name,
+        //                 Agency_Code: agencys[i].Agency_Code
+        //             };
+        //             Agency.push(newAgency);
+        //         }
+        //     }
+        //     // console.log(Agency.length);
+        //     callback(Agency);
+        // });
     };
 
     getEveryAgency_cost_plan_data = function(agency_ni, callback) {
@@ -150,7 +157,10 @@ module.exports = function(mongoose, moment, set) {
             };
             cost_plan.push(one_cost_plan);
         }
-        ltData.find(function(err, agencys) {
+        fs.readFile('../data/data.json', {
+            'encoding': 'utf-8'
+        }, function(err, data) {
+            var agencys = JSON.parse(data);
             for (var i = 0; i < agencys.length; i++) {
                 for (var j = 0; j < cost_plan.length; j++) {
                     if (parseInt(agencys[i].Agency_Code) === parseInt(cost_plan[j].Agency_Code)) {
@@ -161,7 +171,20 @@ module.exports = function(mongoose, moment, set) {
                 }
             }
             callback(cost_plan);
+            // res.json(newdata);
         });
+        // ltData.find(function(err, agencys) {
+        //     for (var i = 0; i < agencys.length; i++) {
+        //         for (var j = 0; j < cost_plan.length; j++) {
+        //             if (parseInt(agencys[i].Agency_Code) === parseInt(cost_plan[j].Agency_Code)) {
+        //                 cost_plan[j].cost += agencys[i].Projected_Actual_Cost == "" ? 0 : parseInt(agencys[i].Projected_Actual_Cost);
+        //                 cost_plan[j].plan += agencys[i].Planned_Cost_m == "" ? 0 : parseInt(agencys[i].Planned_Cost_m);
+        //                 break;
+        //             }
+        //         }
+        //     }
+        //     callback(cost_plan);
+        // });
     };
 
     getEveryAgency_cost_plan = function(callback) {
@@ -172,30 +195,6 @@ module.exports = function(mongoose, moment, set) {
         });
     };
 
-    /**
-     * [getAgency_Num description]
-     * @param  {Function} callback [description]
-     * @return {[type]}            [description]
-     */
-    getAgency_Num = function(callback) {
-        // var Agency_num = [];
-        // Data.find({
-        // 	''
-        // })
-    };
-
-    saveOneData = function(callback) {
-        var oneData = new ltData({
-            'Identifier': '123'
-        });
-        oneData.save(function(err) {
-            if (err) {
-                callback(false);
-            } else {
-                callback(true);
-            }
-        });
-    };
 
     getInvestList = function(invests, callback) {
         var investName = [];
@@ -251,13 +250,28 @@ module.exports = function(mongoose, moment, set) {
     getAgencyInvestmentProject = function(agency_name, callback) {
         // var name = agency_name.replace(/\_/g, " ");
         var id = agency_name;
-        ltData.find({
-            Agency_Code: id
-        }).exec(function(err, invests) {
+        var invests = [];
+        fs.readFile('../data/data.json', {
+            'encoding': 'utf-8'
+        }, function(err, data) {
+            var newdata = JSON.parse(data);
+            for (var i = 0; i < newdata.length; i++) {
+                if (newdata[i].Agency_Code == id) {
+                    invests.push(newdata[i]);
+                }
+            }
             getInvestList(invests, function(investDetail) {
                 callback(investDetail);
             });
         });
+
+        // ltData.find({
+        //     Agency_Code: id
+        // }).exec(function(err, invests) {
+        //     getInvestList(invests, function(investDetail) {
+        //         callback(investDetail);
+        //     });
+        // });
     };
 
     testMoment = function(callback) {
@@ -282,9 +296,7 @@ module.exports = function(mongoose, moment, set) {
     return {
         getAgency_list: getAgency_list,
         arrangeData: arrangeData,
-        getAgency_Num: getAgency_Num,
         getEveryAgency_cost_plan: getEveryAgency_cost_plan,
-        saveOneData: saveOneData,
         getAgencyInvestmentProject: getAgencyInvestmentProject,
         testMoment: testMoment
     };
