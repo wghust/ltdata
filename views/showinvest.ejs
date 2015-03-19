@@ -10,9 +10,9 @@
 <body>
 	<div class="con">
 		<div class="block_top">
-			<span>SELECT</span>
+			<span>Investment Titles</span>
 		</div>
-		<div class="block_con"  style="max-height:200px;overflow:scroll">
+		<div class="block_con"  style="max-height:200px;overflow-y:scroll">
 			<% for(var i=0;i<investName.length;i++) {%>
 				<a href="/get/oneAgency/<%=agencyName%>/investment/<%=investName[i].id%>/detail" class="abtn"><%=investName[i].name%></a>
 			<% } %>
@@ -21,71 +21,97 @@
 	</div>
 	<div class="con">
 		<div class="block_top">
-			<span>DETAIL</span>
+			<span><%=investmentName%></span>
 		</div>
-		<div id="showdata"></div>
+		<div id="showdata" style="height: 400px;"></div>
 	</div>
 	<script type="text/javascript">
 	var myChart = echarts.init(document.getElementById('showdata')); 
+	// option = {
+	//     tooltip : {
+	//         trigger: 'axis',
+	//         axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+	//             type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	//         }
+	//     },
+	//     legend: {
+	//         data:['Actual cost','Time consuming']
+	//     },
+	//     calculable : true,
+	//     xAxis : [
+	//         {
+	//             type : 'value'
+	//         }
+	//     ],
+	//     yAxis : [
+	//         {
+	//             type : 'category',
+	//             axisTick : {show: false},
+	//             data : [<%-projectName%>],
+	//         }
+	//     ],
+	//     series : [
+	//         {
+	//             name:'Actual cost',
+	//             type:'bar',
+	//             stack: 'Actual cost',
+	//             itemStyle : { normal: {label : {show: true, position: 'inside'}}},
+	//             data:[<%-projectCost%>]
+	//         },
+	//         {
+	//             name:'Time consuming',
+	//             type:'bar',
+	//             stack: 'Time consuming',
+	//             itemStyle: {normal: {
+	//                 label : {show: true, position: 'left'}
+	//             }},
+	//             data:[<%-projectTimeLast%>]
+	//         }
+	//     ]
+	// };
+	// 
 	option = {
 	    tooltip : {
-	        trigger: 'axis',
-	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
-	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
-	        }
+	        trigger: 'axis'
 	    },
-	    legend: {
-	        data:['Actual cost','Time consuming']
-	    },
-	    // toolbox: {
-	    //     show : true,
-	    //     feature : {
-	    //         mark : {show: true},
-	    //         dataView : {show: true, readOnly: false},
-	    //         magicType : {show: true, type: ['line', 'bar']},
-	    //         restore : {show: true},
-	    //         saveAsImage : {show: true}
-	    //     }
-	    // },
 	    calculable : true,
+	    legend: {
+	        data:['time consumed/day','Actual cost']
+	    },
 	    xAxis : [
 	        {
-	            type : 'value'
-	        }
-	    ],
-	    yAxis : [
-	        {
 	            type : 'category',
-	            axisTick : {show: false},
 	            data : [<%-projectName%>]
 	        }
 	    ],
+	    yAxis : [
+	    	{
+	            type : 'value',
+	            name : 'time consumed/day',
+	            axisLabel : {
+	                formatter: '{value} days'
+	            }
+	        },
+	        {
+	            type : 'value',
+	            name : 'Actual cost',
+	            axisLabel : {
+	                formatter: '{value} $M'
+	            }
+	        },
+	    ],
 	    series : [
+	    	{
+	            name:'time consumed/day',
+	            type:'bar',
+	            data:[<%-projectTimeLast%>]
+	        },
+
 	        {
 	            name:'Actual cost',
-	            type:'bar',
-	            stack: 'Actual cost',
-	            itemStyle : { normal: {label : {show: true, position: 'inside'}}},
-	            data:[<%-projectCost%>]
-	        },
-	        // {
-	        //     name:'Actual cost',
-	        //     type:'bar',
-	        //     stack: '总量',
-	        //     barWidth : 5,
-	        //     itemStyle: {normal: {
-	        //         label : {show: true}
-	        //     }},
-	        //     data:[320, 302, 341, 374, 390, 450, 420]
-	        // },
-	        {
-	            name:'Time consuming',
-	            type:'bar',
-	            stack: 'Time consuming',
-	            itemStyle: {normal: {
-	                label : {show: true, position: 'left'}
-	            }},
-	            data:[<%-projectTimeLast%>]
+	            type:'line',
+	            yAxisIndex: 1,
+	            data:[<%-projectCost%>],
 	        }
 	    ]
 	};

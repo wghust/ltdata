@@ -10,9 +10,9 @@
 <body>
 	<div class="con">
 		<div class="block_top">
-			<span>SELECT</span>
+			<span>Investment Titles</span>
 		</div>
-		<div class="block_con" style="max-height:200px;overflow:scroll">
+		<div class="block_con" style="max-height:200px;overflow-y:scroll">
 			<% for(var i=0;i<investName.length;i++) {%>
 				<a href="/get/oneAgency/<%=agencyName%>/investment/<%=investName[i].id%>/detail" class="abtn"><%=investName[i].name%></a>
 			<% } %>

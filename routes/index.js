@@ -65,18 +65,21 @@ router.get('/get/getAgencyCostPlan/:type', function(req, res) {
             var data_show = "";
             for (var j = 0; j < back.length; j++) {
                 if (j == 0) {
-                    agency_name += "'" + back[j].Agency_Name + "'";
-                    data_show += "{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                    // agency_name += "'" + back[j].Agency_Name + "'";
+                    agency_name += "'" + back[j].Agency_Code + "'";
+                    data_show += "{value:" + back[j].cost + ",name:'" + back[j].Agency_Code + "'}";
                 } else {
-                    agency_name += ",'" + back[j].Agency_Name + "'";
-                    data_show += ",{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                    // agency_name += ",'" + back[j].Agency_Name + "'";
+                    agency_name += ",'" + back[j].Agency_Code + "'";
+                    data_show += ",{value:" + back[j].cost + ",name:'" + back[j].Agency_Code + "'}";
                 }
             }
 
             res.render('showcostplan', {
                 agency_name: agency_name,
                 data_show: data_show,
-                charttitle: 'Actual Cost'
+                charttitle: 'Actual Cost',
+                precent: '60%'
                 // plan_show: plan_show
             });
         });
@@ -87,18 +90,23 @@ router.get('/get/getAgencyCostPlan/:type', function(req, res) {
                 var data_show = "";
                 for (var j = 0; j < back.length; j++) {
                     if (j == 0) {
-                        agency_name += "'" + back[j].Agency_Name + "'";
-                        data_show += "{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                        // agency_name += "'" + back[j].Agency_Name + "'";
+                        agency_name += "'" + back[j].Agency_Code + "'";
+                        // data_show += "{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                        data_show += "{value:" + back[j].cost + ",name:'" + back[j].Agency_Code + "'}";
                     } else {
-                        agency_name += ",'" + back[j].Agency_Name + "'";
-                        data_show += ",{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                        // agency_name += ",'" + back[j].Agency_Name + "'";
+                        agency_name += ",'" + back[j].Agency_Code + "'";
+                        // data_show += ",{value:" + back[j].cost + ",name:'" + back[j].Agency_Name + "'}";
+                        data_show += ",{value:" + back[j].cost + ",name:'" + back[j].Agency_Code + "'}";
                     }
                 }
 
                 res.render('showcostplan', {
                     agency_name: agency_name,
                     data_show: data_show,
-                    charttitle: 'PLAN COST'
+                    charttitle: 'PLAN COST',
+                    precent: '60%'
                 });
             });
         }
@@ -140,7 +148,7 @@ router.get('/get/oneAgency/:agencyname/investment/:investmentid/detail', functio
             projectId = "",
             projectCost = "",
             projectTimeLast = "";
-
+        var investmentName = "";
         for (var i = 0; i < investList.length; i++) {
             // get all Investment
             var oneInvest = {
@@ -152,6 +160,7 @@ router.get('/get/oneAgency/:agencyname/investment/:investmentid/detail', functio
             // get one Invest's project
             if (investList[i].investid === investmentId) {
                 projectDetail = investList[i].project;
+                investmentName = investList[i].investname
             }
         }
 
@@ -159,13 +168,15 @@ router.get('/get/oneAgency/:agencyname/investment/:investmentid/detail', functio
             if (i == 0) {
                 projectName += "'" + projectDetail[i].projectname + "'";
                 projectId += projectDetail[i].projectid;
-                projectCost += "-" + projectDetail[i].cost * 100;
-                projectTimeLast += projectDetail[i].timelast;
+                projectCost += "-" + projectDetail[i].cost;
+                var a = isNaN(parseInt(projectDetail[i].timelast)) ? 0 : parseInt(projectDetail[i].timelast);
+                projectTimeLast += a;
             } else {
                 projectName += ",'" + projectDetail[i].projectname + "'";
                 projectId += "," + projectDetail[i].projectid;
-                projectCost += ",-" + projectDetail[i].cost * 100;
-                projectTimeLast += "," + projectDetail[i].timelast;
+                projectCost += ",-" + projectDetail[i].cost;
+                var a = isNaN(parseInt(projectDetail[i].timelast)) ? 0 : parseInt(projectDetail[i].timelast);
+                projectTimeLast += "," + a;
             }
         }
         console.log(projectDetail);
@@ -175,7 +186,8 @@ router.get('/get/oneAgency/:agencyname/investment/:investmentid/detail', functio
             projectName: projectName,
             projectId: projectId,
             projectCost: projectCost,
-            projectTimeLast: projectTimeLast
+            projectTimeLast: projectTimeLast,
+            investmentName: investmentName
         });
     });
 });

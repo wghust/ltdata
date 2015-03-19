@@ -249,9 +249,10 @@ module.exports = function(mongoose, moment, set) {
     };
 
     getAgencyInvestmentProject = function(agency_name, callback) {
-        var name = agency_name.replace(/\_/g, " ");
+        // var name = agency_name.replace(/\_/g, " ");
+        var id = agency_name;
         ltData.find({
-            Agency_Name: name
+            Agency_Code: id
         }).exec(function(err, invests) {
             getInvestList(invests, function(investDetail) {
                 callback(investDetail);
