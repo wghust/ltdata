@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>郎婷，你好二</title>
+	<link rel="stylesheet" type="text/css" href="/stylesheets/style.css">
+	<script type="text/javascript" src="/javascripts/jquery-1.8.2.min.js"></script>
+	<script type="text/javascript" src="/javascripts/echarts-plain.js"></script>
+</head>
+<body>
+	<div class="con">
+		<div class="block_top">
+			<span>SELECT</span>
+		</div>
+		<div class="block_con"  style="max-height:200px;overflow:scroll">
+			<% for(var i=0;i<investName.length;i++) {%>
+				<a href="/get/oneAgency/<%=agencyName%>/investment/<%=investName[i].id%>/detail" class="abtn"><%=investName[i].name%></a>
+			<% } %>
+			<div class="clear"></div>
+		</div>
+	</div>
+	<div class="con">
+		<div class="block_top">
+			<span>DETAIL</span>
+		</div>
+		<div id="showdata"></div>
+	</div>
+	<script type="text/javascript">
+	var myChart = echarts.init(document.getElementById('showdata')); 
+	option = {
+	    tooltip : {
+	        trigger: 'axis',
+	        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+	            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+	        }
+	    },
+	    legend: {
+	        data:['Actual cost','Time consuming']
+	    },
+	    // toolbox: {
+	    //     show : true,
+	    //     feature : {
+	    //         mark : {show: true},
+	    //         dataView : {show: true, readOnly: false},
+	    //         magicType : {show: true, type: ['line', 'bar']},
+	    //         restore : {show: true},
+	    //         saveAsImage : {show: true}
+	    //     }
+	    // },
+	    calculable : true,
+	    xAxis : [
+	        {
+	            type : 'value'
+	        }
+	    ],
+	    yAxis : [
+	        {
+	            type : 'category',
+	            axisTick : {show: false},
+	            data : [<%-projectName%>]
+	        }
+	    ],
+	    series : [
+	        {
+	            name:'Actual cost',
+	            type:'bar',
+	            stack: 'Actual cost',
+	            itemStyle : { normal: {label : {show: true, position: 'inside'}}},
+	            data:[<%-projectCost%>]
+	        },
+	        // {
+	        //     name:'Actual cost',
+	        //     type:'bar',
+	        //     stack: '总量',
+	        //     barWidth : 5,
+	        //     itemStyle: {normal: {
+	        //         label : {show: true}
+	        //     }},
+	        //     data:[320, 302, 341, 374, 390, 450, 420]
+	        // },
+	        {
+	            name:'Time consuming',
+	            type:'bar',
+	            stack: 'Time consuming',
+	            itemStyle: {normal: {
+	                label : {show: true, position: 'left'}
+	            }},
+	            data:[<%-projectTimeLast%>]
+	        }
+	    ]
+	};
+    myChart.setOption(option);
+	</script>
+</body>
+</html>
