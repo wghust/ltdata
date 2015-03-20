@@ -16,6 +16,28 @@ var models = {
     Data: require("../models/data.js")(moment, s, fs)
 }
 
+
+router.get('/data/op', function(req, res) {
+    fs.readFile('../data/data.json', {
+        'encoding': 'utf-8'
+    }, function(err, data) {
+        var newdata = JSON.parse(data);
+        console.log(newdata);
+        res.json(newdata);
+        // for (var i = 0; i < newdata.length; i++) {
+        //     delete newdata[i]._id
+        // }
+        // // console.log(newdata)
+        // // res.json(newdata);
+        // // console.log()
+        // fs.writeFile('../data/data.json', JSON.stringify(newdata), {
+        //     'encoding': 'utf-8'
+        // }, function(err) {
+        //     res.json(newdata);
+        // });
+
+    });
+});
 /* GET home page. */
 router.get('/', function(req, res) {
     res.render('index', {
