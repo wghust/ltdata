@@ -100,7 +100,7 @@ module.exports = function(moment, set, fs) {
      * @return {[type]}            [description]
      */
     getAgency_list = function(callback) {
-        fs.readFile('../data/data.json', {
+        fs.readFile('../data/basic_data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
             var agencys = JSON.parse(data);
@@ -157,15 +157,15 @@ module.exports = function(moment, set, fs) {
             };
             cost_plan.push(one_cost_plan);
         }
-        fs.readFile('../data/data.json', {
+        fs.readFile('../data/basic_data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
             var agencys = JSON.parse(data);
             for (var i = 0; i < agencys.length; i++) {
                 for (var j = 0; j < cost_plan.length; j++) {
                     if (parseInt(agencys[i].Agency_Code) === parseInt(cost_plan[j].Agency_Code)) {
-                        cost_plan[j].cost += agencys[i].Projected_Actual_Cost == "" ? 0 : parseInt(agencys[i].Projected_Actual_Cost);
-                        cost_plan[j].plan += agencys[i].Planned_Cost_m == "" ? 0 : parseInt(agencys[i].Planned_Cost_m);
+                        cost_plan[j].cost += agencys[i].Projected_Actual_Cost == "" ? 0 : parseFloat(agencys[i].Projected_Actual_Cost);
+                        cost_plan[j].plan += agencys[i].Planned_Cost_m == "" ? 0 : parseFloat(agencys[i].Planned_Cost_m);
                         break;
                     }
                 }
@@ -251,7 +251,7 @@ module.exports = function(moment, set, fs) {
         // var name = agency_name.replace(/\_/g, " ");
         var id = agency_name;
         var invests = [];
-        fs.readFile('../data/data.json', {
+        fs.readFile('../data/basic_data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
             var newdata = JSON.parse(data);
