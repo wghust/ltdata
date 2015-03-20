@@ -160,6 +160,7 @@ module.exports = function(moment, set, fs) {
         fs.readFile('../data/basic_data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
+            console.log(data);
             var agencys = JSON.parse(data);
             for (var i = 0; i < agencys.length; i++) {
                 for (var j = 0; j < cost_plan.length; j++) {
