@@ -100,7 +100,7 @@ module.exports = function(moment, set, fs) {
      * @return {[type]}            [description]
      */
     getAgency_list = function(callback) {
-        fs.readFile('../data/basic_data.json', {
+        fs.readFile('../data/data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
             var agencys = JSON.parse(data);
@@ -157,10 +157,9 @@ module.exports = function(moment, set, fs) {
             };
             cost_plan.push(one_cost_plan);
         }
-        fs.readFile('../data/basic_data.json', {
+        fs.readFile('../data/data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
-            console.log(data);
             var agencys = JSON.parse(data);
             for (var i = 0; i < agencys.length; i++) {
                 for (var j = 0; j < cost_plan.length; j++) {
@@ -252,7 +251,7 @@ module.exports = function(moment, set, fs) {
         // var name = agency_name.replace(/\_/g, " ");
         var id = agency_name;
         var invests = [];
-        fs.readFile('../data/basic_data.json', {
+        fs.readFile('../data/data.json', {
             'encoding': 'utf-8'
         }, function(err, data) {
             var newdata = JSON.parse(data);
