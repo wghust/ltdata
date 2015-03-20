@@ -21,8 +21,8 @@ router.get('/data/op', function(req, res) {
     fs.readFile('../data/data.json', {
         'encoding': 'utf-8'
     }, function(err, data) {
-        var newdata = JSON.parse(data);
-        console.log(newdata);
+        var newdata = eval(data);
+        // console.log(newdata);
         res.json(newdata);
         // for (var i = 0; i < newdata.length; i++) {
         //     delete newdata[i]._id
